@@ -5,7 +5,7 @@
 // #include "index.html"
 
 int main(){
-    struct Server server = server_constructor(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 80, 10, launch);
+    struct Server server = server_constructor(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 10, launch);
     server.launch(&server);
 
     return 0;

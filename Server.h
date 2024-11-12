@@ -14,11 +14,10 @@ struct Server{
     int service;
     int protocol;
     long interface;
-    int port;
     int backlog;
 
     struct sockaddr_in address;
-
+    int addrlen;
     int socket;
 
     void (*launch) (struct Server *server);
@@ -27,6 +26,6 @@ struct Server{
 void launch(struct Server *server);
 
 struct Server server_constructor(int domain, int service, int protocol,
- long interface, int port, int backlog, void (*launch) (struct Server *server));
+ long interface, int backlog, void (*launch) (struct Server *server));
 
 #endif /*end of server.h*/
