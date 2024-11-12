@@ -1,6 +1,6 @@
 // Server.c 
-// Name: Desiree Gutierrez
-//Class: CS484 Computer Networking
+// Name: Desiree Gutierrez and Tyreke Hetzel
+// Class: CS484 Computer Networking
 // Date: 11/6/2024
 
 #include "Server.h"
