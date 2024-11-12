@@ -13,7 +13,7 @@
 
 #define Port 8080
 
-struct Server server_constructor(int domain, int service, int protocol, long interface, int backlog, void (*launch)(struct Server *server)){
+struct Server server_constructor(int domain, int service, int protocol, long interface, int backlog){
     struct Server server;
 
     //config a the struct server
@@ -23,22 +23,20 @@ struct Server server_constructor(int domain, int service, int protocol, long int
     server.interface = interface;
     server.backlog = backlog;
 
-    server.addrlen = sizeof(server.address);
     server.address.sin_family = domain;
     server.address.sin_port = htons(Port);
     server.address.sin_addr.s_addr = interface;
+    server.addrlen = sizeof(server.address);
 
     //Test of socket and create a socket
     server.socket = socket(domain, service, protocol);
-    printf("1\n");
     if(server.socket < 0) {
         perror("Failed to connect socket...\n");
         exit(1);
     }
     printf("Socket created successfully.\n");
 
-    if ((bind(server.socket, (struct sockaddr*) &server.address,
-        sizeof(server.address))) <0){
+    if ((bind(server.socket, (struct sockaddr*) &server.address, sizeof(server.address))) < 0){
             perror("failed to bind socket... \n");
             exit(1);
         }
@@ -51,23 +49,32 @@ struct Server server_constructor(int domain, int service, int protocol, long int
     }
     printf("Listening for incoming connections...\n");
 
-    server.launch = launch;
     return server;
+   
 }
 
-void launch(struct Server *server){
 
-    char buffer[30000];
-    char *hello = "HTTP/1.1 200 OK\r\nContent-Type: text/html\nConnection: closed\n <html><body><h1>Hello, World!</h1></body></html>";
-    int address_length = sizeof(server->address);
-    int new_socket = accept(server->socket, (struct sockaddr *) &server->address, (socklen_t *) &address_length);
-    while (1){
+int main(){
+    struct Server server = server_constructor(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 10);
     
+ while (1){
         printf("======== WAITING FOR CONNECTION ========\n");
-        read(new_socket, buffer, 30000);
-        printf("%s\n", buffer);
-        write (new_socket, hello, strlen(hello));
+         server.addrlen = sizeof(server.address);
+        int new_socket = accept(server.socket, (struct sockaddr*) &server.address, (socklen_t *) &server.addrlen);
+        if (new_socket < 0) {
+            perror("Accept failed");
+            continue;
+        }
+        printf("Accepted a new connection.\n");
+        
+        char *hello = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nHello, World!";
+        socklen_t address_length = sizeof(server.address);
+        
+        send(new_socket, hello, strlen(hello), 0);
         close(new_socket);
     }
+    close(server.socket);
+    return 0;
 }
+
 

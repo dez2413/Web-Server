@@ -23,9 +23,8 @@ struct Server{
     void (*launch) (struct Server *server);
 };
 
-void launch(struct Server *server);
 
 struct Server server_constructor(int domain, int service, int protocol,
- long interface, int backlog, void (*launch) (struct Server *server));
+ long interface, int backlog);
 
 #endif /*end of server.h*/
