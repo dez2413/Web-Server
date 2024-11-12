@@ -1,3 +1,8 @@
+// test.c
+// Name: Desiree Gutierrez and Tyreke
+//Class: CS484 Computer Networking
+// Date: 11/6/2024
+
 #include <stdio.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
