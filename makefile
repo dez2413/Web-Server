@@ -1,10 +1,10 @@
-all: server
+all: test
 
-server: Server.h Server.c 
-	gcc Server.c -o server
+test: Server.h Server.c queue.c queue.h
+	gcc Server.c queue.c -o test
 
 clean:
-	rm -f lab4
+	rm -f test
 
-run: server
-	./server
+server: test
+	./test
